@@ -53,7 +53,19 @@ const demoData = [
 
 const HomePage = () => {
   const [products, setProducts] = React.useState<Product[]>(demoData);
+  const addProduct = () => {
+    const newProduct: Product = {
+      id: Date.now(), // Using timestamp as a unique id
+      title: "New Product",
+      image: {
+        id: Date.now(),
+        product_id: Date.now(),
+        src: "https://via.placeholder.com/150", // Placeholder image
+      },
+    };
 
+    setProducts((prevProducts) => [...prevProducts, newProduct]);
+  };
   useEffect(() => {
     console.dir(products);
   }, [products]);
@@ -61,6 +73,9 @@ const HomePage = () => {
   return (
     <div>
       <ProductList products={products} setProducts={setProducts} />
+      <button onClick={addProduct} className="mb-4 p-2 bg-green-500 text-white">
+        Add Product
+      </button>
     </div>
   );
 };

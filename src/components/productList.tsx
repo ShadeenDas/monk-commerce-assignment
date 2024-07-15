@@ -18,7 +18,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import Image from "next/image";
-import { GripVertical, X, ChevronDown } from "lucide-react";
+import { GripVertical, X, ChevronDown, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "./ui/input";
 import {
@@ -33,6 +33,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
+import EditProductDialog from "./editProductDialog";
 
 // ============== start type definitions ==============
 export type Product = {
@@ -51,6 +52,7 @@ export type Variant = {
   product_id: number;
   title: string;
   price: string;
+  selected?: false;
 };
 
 export type ProductListProps = {
@@ -144,6 +146,19 @@ const ProductItem: React.FC<{
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+  const [isDialogOpen, setIsDialogOpen] = useState(false); //to open dialog
+
+  const handleSave = (selectedProducts: Product[]) => {
+    setProductsState((prevProducts) => {
+      const productIndex = prevProducts.findIndex((p) => p.id === product.id);
+      const newProducts = [
+        ...prevProducts.slice(0, productIndex),
+        ...selectedProducts,
+        ...prevProducts.slice(productIndex + 1),
+      ];
+      return newProducts;
+    });
+  };
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -212,6 +227,11 @@ const ProductItem: React.FC<{
             height={48}
           />
           <p>{product.title}</p>
+          <div className=" flex items-center gap-4">
+            <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
+              <Edit /> Edit
+            </Button>
+          </div>
         </div>
 
         <div className="col-span-5 flex items-center gap-4 w-full">
@@ -245,11 +265,17 @@ const ProductItem: React.FC<{
           )}
         </div>
         {/* <div className="col-span-1"> */}
+
         <Button variant="secondary">
           <X />
         </Button>
         {/* </div> */}
       </div>
+      <EditProductDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onSave={handleSave}
+      />
 
       {variants?.length && (
         <Collapsible className="flex flex-col">
