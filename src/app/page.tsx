@@ -73,7 +73,10 @@ const HomePage = () => {
   return (
     <div>
       <ProductList products={products} setProducts={setProducts} />
-      <button onClick={addProduct} className="mb-4 p-2 bg-green-500 text-white">
+      <button
+        onClick={addProduct}
+        className="mb-4 py-3 px-6 rounded-md bg-green-500 text-white hover:border-green-500 hover:text-green-500 hover:border-2 hover:bg-transparent float-right  duration-300 ease-in-out"
+      >
         Add Product
       </button>
     </div>

@@ -138,11 +138,15 @@ const EditProductDialog: React.FC<EditProductDialogProps> = ({
           )}
         </DialogDescription>
         <DialogFooter>
-          <Button onClick={handleSave} disabled={loading || !!error}>
-            Save
-          </Button>
           <Button variant="secondary" onClick={onClose}>
             Cancel
+          </Button>
+          <Button
+            className="bg-green-500 text-white"
+            onClick={handleSave}
+            disabled={loading || !!error}
+          >
+            Save
           </Button>
         </DialogFooter>
       </DialogContent>

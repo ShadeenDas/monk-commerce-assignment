@@ -63,7 +63,10 @@ export type ProductListProps = {
 // ============== end type definitions ==============
 
 // *============================ Displaying single Variant ============================*
-const VariantItem: React.FC<{ variant: Variant }> = ({ variant }) => {
+const VariantItem: React.FC<{ variant: Variant; onRemove: () => void }> = ({
+  variant,
+  onRemove,
+}) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: variant.id });
 
@@ -119,7 +122,7 @@ const VariantItem: React.FC<{ variant: Variant }> = ({ variant }) => {
           )}
         </div>
         {/* <div className="col-span-1"> */}
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={onRemove}>
           <X />
         </Button>
         {/* </div> */}
@@ -217,7 +220,7 @@ const ProductItem: React.FC<{
       className="flex flex-col p-2 bg-background"
     >
       <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-6 flex items-center gap-4 cursor-grab active:cursor-grabbing focus:outline-none">
+        <div className="col-span-5 flex items-center gap-4 cursor-grab active:cursor-grabbing focus:outline-none">
           <GripVertical className="" />
           {/* image */}
           <Image
@@ -227,11 +230,11 @@ const ProductItem: React.FC<{
             height={48}
           />
           <p>{product.title}</p>
-          <div className=" flex items-center gap-4">
-            <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
-              <Edit /> Edit
-            </Button>
-          </div>
+        </div>
+        <div className="col-span-1 flex items-center gap-4">
+          <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
+            <Edit /> Edit
+          </Button>
         </div>
 
         <div className="col-span-5 flex items-center gap-4 w-full">
@@ -266,7 +269,12 @@ const ProductItem: React.FC<{
         </div>
         {/* <div className="col-span-1"> */}
 
-        <Button variant="secondary">
+        <Button
+          variant="secondary"
+          onClick={() =>
+            setProductsState(productsState.filter((p) => p.id !== product.id))
+          }
+        >
           <X />
         </Button>
         {/* </div> */}
@@ -295,7 +303,13 @@ const ProductItem: React.FC<{
               >
                 <div className="my-2">
                   {variants.map((variant) => (
-                    <VariantItem key={variant.id} variant={variant} />
+                    <VariantItem
+                      key={variant.id}
+                      variant={variant}
+                      onRemove={() =>
+                        setVariants(variants.filter((v) => v.id !== variant.id))
+                      }
+                    />
                   ))}
                 </div>
               </SortableContext>
